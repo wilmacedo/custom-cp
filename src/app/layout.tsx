@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
-import './globals.css';
+
+import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Custom Captive Portal',
   description: 'Custom Captive Portal for UniFi Controller',
+  title: 'Custom Captive Portal',
 };
 
 export default function RootLayout({
