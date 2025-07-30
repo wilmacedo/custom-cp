@@ -1,6 +1,7 @@
 'use client';
 
 import { GalleryVerticalEnd, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -16,6 +17,8 @@ export default function Home() {
 
   const [clientInfo, setClientInfo] = useState('');
 
+  const router = useRouter();
+
   useEffect(() => {
     setClientInfo(window.location.toString());
   }, []);
@@ -23,12 +26,14 @@ export default function Home() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const params = new URLSearchParams(window.location.search);
+
     startTransition(async () => {
-      const result = await authenticateOTP(otp);
+      const result = await authenticateOTP(otp, params.get('ap') ?? '');
 
       if (result.success) {
         toast.success(result.message);
-        setOtp('');
+        router.push('/success');
       } else {
         toast.error(result.message);
       }

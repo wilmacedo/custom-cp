@@ -26,7 +26,7 @@ interface UniFiAuthResponse {
   success: boolean;
 }
 
-export async function authenticateOTP(otp: string): Promise<AuthResult> {
+export async function authenticateOTP(otp: string, macAddress: string): Promise<AuthResult> {
   try {
     if (otp !== VALID_OTP) {
       return {
@@ -35,9 +35,7 @@ export async function authenticateOTP(otp: string): Promise<AuthResult> {
       };
     }
 
-    const mockedMacAddress = '7a:4c:d1:82:00:d5';
-
-    const authResult = await authenticateWithUniFi(mockedMacAddress);
+    const authResult = await authenticateWithUniFi(macAddress);
     if (!authResult.success) {
       return {
         message: authResult.message,
