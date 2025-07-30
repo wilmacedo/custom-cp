@@ -21,7 +21,7 @@ export function AuthForm() {
     event.preventDefault();
 
     const params = new URLSearchParams(window.location.search);
-    const macAddress = params.get('ap');
+    const macAddress = params.get('id');
     if (!macAddress) {
       toast.error('Endereço MAC não encontrado');
       return;
