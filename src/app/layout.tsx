@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import '@/styles/globals.css';
+import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
   description: 'Custom Captive Portal for UniFi Controller',
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <main>{children}</main>
+        <Toaster richColors />
+      </body>
     </html>
   );
 }
