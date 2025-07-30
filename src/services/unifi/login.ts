@@ -2,6 +2,7 @@
 
 import { uniFiControllerResponseSchema } from '@/app/types/unifi-controller';
 import { env } from '@/env';
+import { uniFiClient } from '@/lib/unifi-client';
 
 interface LoginResult {
   error?: string;
@@ -9,35 +10,15 @@ interface LoginResult {
 }
 
 export async function loginToUniFi(): Promise<LoginResult> {
-  const request = await fetch(`${env.UNIFI_CONTROLLER_URL}/api/login`, {
-    body: JSON.stringify({
-      password: env.UNIFI_PASSWORD,
-      username: env.UNIFI_USERNAME,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
+  const response = await uniFiClient.post('/api/login', {
+    password: env.UNIFI_PASSWORD,
+    username: env.UNIFI_USERNAME,
   });
-  if (!request.ok) {
-    const errorText = await request.text();
-    return {
-      error: errorText,
-      success: false,
-    };
-  }
 
-  const response = await request.json();
-  const { data, success } = uniFiControllerResponseSchema.safeParse(response);
-  if (!success) {
+  const parsed = uniFiControllerResponseSchema.safeParse(response.data);
+  if (!parsed.success || parsed.data.meta.rc !== 'ok') {
     return {
-      error: 'Invalid response from UniFi controller',
-      success: false,
-    };
-  }
-  if (data.meta.rc === 'error') {
-    return {
-      error: data.meta.msg,
+      error: parsed.success ? parsed.data.meta.msg : 'Resposta inválida do controlador UniFi',
       success: false,
     };
   }
