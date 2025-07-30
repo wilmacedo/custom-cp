@@ -17,8 +17,11 @@ COPY . .
 # Build the app
 RUN pnpm build
 
-# Expose port
-EXPOSE 3000
+# Expose port 80
+EXPOSE 80
+
+# Set environment variable for port
+ENV PORT=80
 
 # Start the app
 CMD ["pnpm", "start"] 
